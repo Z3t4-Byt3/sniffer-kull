@@ -10,15 +10,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
-int print_source_dest_address (char* source, char* dest) {
-  if (strncmp (source, dest, INET_ADDRSTRLEN) != 0) {
-    printf ("%s --> %s : ", source, dest);
-    return 1;
-  }
-  else
-    return -1;
-}
+#include "ksniff.h"
 
 void print_tcp_packet (const u_char *buffer, struct iphdr *iph) {
 
@@ -100,9 +92,11 @@ void print_ip_header (const u_char *buffer, struct iphdr *iph,
   ipAddr = dest.sin_addr;
   inet_ntop (AF_INET, &ipAddr, dest_ip, INET_ADDRSTRLEN);
 
-  return_i = print_source_dest_address (source_ip, dest_ip);
+  return_i = strncmp (source_ip, dest_ip, INET_ADDRSTRLEN);
 
-  if (return_i > 0) {
+  if (return_i != 0) {
+
+    printf ("%s --> %s : ", soruce_ip, dest_ip);
 
     switch (protocolo) {
       case 1:
