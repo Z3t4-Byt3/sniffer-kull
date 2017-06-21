@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <pcap/pcap.h>
 #include <locale.h>
 
@@ -10,8 +11,8 @@ int main (int argc, char *argv[]) {
 
   setlocale (LC_ALL, "");
 
-  if (argc != 2)
-    print_error (" Uso: sniffer <device>");
+  if (argc != 2 || getuid() != 0)
+    print_error (" Uso: sudo ./sniffer <device>");
 
   pcap_t *handle;
   char errbuf[PCAP_ERRBUF_SIZE];
